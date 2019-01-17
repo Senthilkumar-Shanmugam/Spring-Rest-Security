@@ -4,6 +4,7 @@ spring:
     username: root
     password: null
   tomcat:
+    port: 9092
     max-wait: 20000
     max-active: 50
     max-idle: 20
