@@ -1,0 +1,5 @@
+package spring.security.jwt.springbootjwt.controller;
+
+public class UserController {
+
+}
