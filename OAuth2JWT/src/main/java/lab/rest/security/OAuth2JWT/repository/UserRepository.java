@@ -7,5 +7,6 @@ import lab.rest.security.OAuth2JWT.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
+	User findByUsername(String username);
 
 }
