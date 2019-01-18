@@ -1,0 +1,7 @@
+package spring.security.jwt.springbootjwt.security;
+
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+
+public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter {
+
+}
