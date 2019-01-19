@@ -29,13 +29,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 	
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+		oauthServer.realm(REALM);
+		
+		oauthServer.tokenKeyAccess("permitAll()")
+		           .checkTokenAccess("isAuthenticated()")
+		           .allowFormAuthenticationForClients();
+	}
 	
+	//Client app registeration.. only these clients can ask for access token
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception{
 		clients.inMemory()
-		.withClient("crmClient1") //client-id
-		.secret("crmSecret") // client secret
-		.authorizedGrantTypes("password","refresh_token")
+		.withClient("testClient") //client-id
+		.secret("secret") // client secret
+		.authorizedGrantTypes("client-credentials","password","refresh_token")
 		.authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
 		.scopes("read","write","trust")
 		.accessTokenValiditySeconds(300)
@@ -44,12 +53,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler)
-		.authenticationManager(authenticationManager);
+		endpoints.tokenStore(tokenStore).
+		          userApprovalHandler(userApprovalHandler)
+		         .authenticationManager(authenticationManager) //bean to authenticate users
+		         .tokenEnhancer(new CustomTokenEnhancer());
 	}
 
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer.realm(REALM);
-	}
+	
 }
